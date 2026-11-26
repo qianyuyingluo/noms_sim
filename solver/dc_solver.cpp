@@ -297,10 +297,12 @@ BandMatrix makeJacobian(const Model& model, const std::vector<double>& values, d
 }
 
 bool solvePoint(const Model& model, std::vector<double>& values, double vgs, double vds) {
+    constexpr double tolerance = 2e-14;
+    constexpr double roundoffTolerance = 2e-13;
     auto error = residual(model, values, vgs, vds);
     for (int iteration = 0; iteration < 65; ++iteration) {
         const double norm = maxResidual(error);
-        if (norm < 2e-14) {
+        if (norm < tolerance) {
             return true;
         }
         auto correction = error;
@@ -326,10 +328,11 @@ bool solvePoint(const Model& model, std::vector<double>& values, double vgs, dou
             }
         }
         if (!accepted) {
-            return false;
+            // 细网格上的相邻电势很接近，残差可能停在浮点舍入误差附近。
+            return norm < roundoffTolerance;
         }
     }
-    return false;
+    return maxResidual(error) < roundoffTolerance;
 }
 
 DcResult readResults(const Model& model, const MOSFET& device, std::vector<double> values,
@@ -417,7 +420,8 @@ DcResult solveDc(const DeviceMesh& mesh, const MOSFET& device, double vgs, doubl
     // 逐步调高偏压。一次求解失败时把步长减半，沿用上一点的解重试。
     const double change = std::max(std::abs(vgs - fromGate), std::abs(vds - fromDrain));
     if (change > 0) {
-        double step = std::min(1.0, 0.05 / change);
+        const double maxStep = std::min(1.0, 0.05 / change);
+        double step = maxStep;
         double fraction = 0.0;
         while (fraction < 1.0) {
             const double next = std::min(1.0, fraction + step);
@@ -426,6 +430,7 @@ DcResult solveDc(const DeviceMesh& mesh, const MOSFET& device, double vgs, doubl
                            fromDrain + next * (vds - fromDrain))) {
                 values = std::move(trial);
                 fraction = next;
+                step = std::min(maxStep, 2 * step);
             } else {
                 step /= 2;
                 if (step * change < 1e-5) {

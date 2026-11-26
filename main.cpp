@@ -90,10 +90,10 @@ int main() {
         MOSFET device = exampleDevice();
 
         // ===== 网格密度：做网格加密对比时，在这里修改 =====
-        device.Nx = 20;                   // 从源极到漏极方向的总格数
-        device.NySi = 20;                 // 硅区深度方向的总格数
-        device.NyOx = 2;                  // 栅氧层厚度方向的总格数
-        device.surfaceMeshDepthUm = 0.036; // 在距硅表面 36 nm 以内加密，设为 0 关闭
+        device.Nx = 40;                   // 从源极到漏极方向的总格数
+        device.NySi = 40;                 // 硅区深度方向的总格数
+        device.NyOx = 5;                  // 栅氧层厚度方向的总格数
+        device.surfaceMeshDepthUm = 0.012; // 在距硅表面 12 nm 以内加密，设为 0 关闭
 
         const DeviceMesh mesh = buildMesh(device);
         std::filesystem::create_directories("output");
