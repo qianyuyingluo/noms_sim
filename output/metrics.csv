@@ -1,0 +1,14 @@
+metric,value,unit,Vgs_V,Vds_V,second_Vds_V,method,status
+Vth,0.6438944598776779,V,0.6438944598776779,0.1,nan,Id=100nA*(W/L); log interpolation,ok
+Vth_high_vds,0.6400517851090346,V,0.6400517851090346,1,nan,Id=100nA*(W/L); log interpolation,ok
+Ion,8.676553796964559e-06,A,1.4,0.1,nan,Configured on bias,ok
+Ioff,5.437888474526094e-13,A,0.3,0.1,nan,Configured off bias,ok
+Ion_over_Ioff,15955740.61073533,1,nan,0.1,0.1,Ion and Ioff rows define biases,ok
+gm,9.550224297299553e-05,S,1.4,1,nan,Centered gate-bias difference,ok
+ro,268879.6480935524,ohm,1.4,1,nan,Inverse centered drain-current slope,ok
+gm_ro,25.67860948272398,V/V,1.4,1,nan,gm and ro at the same bias,ok
+SS,68.18786193847853,mV/dec,nan,0.1,nan,Two decades from 0.001 to 0.1 times threshold current,ok
+DIBL,4.269638631825895,mV/V,nan,0.1,1,Low Vds Vth minus high Vds Vth,ok
+Cgg,4.103370771449791e-15,F,1.4,1,nan,Quasi-static centered derivative of gate charge,ok
+threshold_current,5e-08,A,nan,nan,nan,100nA times W/L,ok
+difference_step,0.005,V,nan,nan,nan,Half-step for centered differences,ok
